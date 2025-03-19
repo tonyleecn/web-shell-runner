@@ -37,6 +37,8 @@ git https://github.com/tonyleecn/web-shell-runner.git
 cd web-shell-runner
 
 2. 安装依赖
+python3 -m venv venv
+source venv/bin/activate
 bash
 pip install -r requirements.txt
 
@@ -44,8 +46,7 @@ pip install -r requirements.txt
 bash
 python app.py
 
-或
-
+4. 访问项目
 bash
-./start.sh
+http://localhost:4446
 
