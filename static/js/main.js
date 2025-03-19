@@ -141,8 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 每30秒刷新一次端口状态
+    // 每3秒刷新一次端口状态
     if (document.querySelectorAll('.port-badge').length > 0) {
-        setInterval(refreshPortStatus, 30000);
+        setInterval(refreshPortStatus, 3000);
     }
 }); 
