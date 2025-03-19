@@ -16,6 +16,14 @@
 - 数据库：SQLite
 - UI框架：Bootstrap
 
+## 截图展示
+
+### 主界面
+![主界面](demo-page/main-interface.png)
+
+### 脚本执行
+![脚本执行](demo-page/script-execution.png)
+
 ## 安装步骤
 
 ### 前提条件
