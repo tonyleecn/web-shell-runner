@@ -11,6 +11,7 @@ from config import Config
 from utils.script_runner import ScriptRunner
 from werkzeug.utils import secure_filename
 import tempfile
+from utils.port_checker import check_ports_status
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -26,6 +27,7 @@ with app.app_context():
 class ScriptForm(FlaskForm):
     name = StringField('服务名称', validators=[DataRequired()])
     urls = TextAreaField('应用访问URL')
+    ports = TextAreaField('监听端口')
     description = TextAreaField('描述')
     
     # 四种操作的脚本路径
@@ -74,6 +76,11 @@ class ImportForm(FlaskForm):
 @app.route('/')
 def index():
     scripts = Script.query.order_by(Script.position).all()
+    
+    # 为每个脚本添加端口状态信息
+    for script in scripts:
+        script.port_status = check_ports_status(script)
+    
     return render_template('index.html', scripts=scripts)
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -86,6 +93,7 @@ def add_script():
         script = Script(
             name=form.name.data,
             urls=form.urls.data,
+            ports=form.ports.data,
             description=form.description.data,
             position=max_position + 1,
             
@@ -118,6 +126,7 @@ def edit_script(id):
     if form.validate_on_submit():
         script.name = form.name.data
         script.urls = form.urls.data
+        script.ports = form.ports.data
         script.description = form.description.data
         
         # 脚本路径
@@ -233,6 +242,7 @@ def export_scripts():
             scripts_data.append({
                 'name': script.name,
                 'urls': script.urls,
+                'ports': script.ports,
                 'description': script.description,
                 'position': script.position,
                 
@@ -332,6 +342,7 @@ def import_scripts():
                 if existing_script:
                     # 更新现有脚本
                     existing_script.urls = script_data.get('urls', '')
+                    existing_script.ports = script_data.get('ports', '')
                     existing_script.description = script_data.get('description', '')
                     
                     # 脚本路径
@@ -354,6 +365,7 @@ def import_scripts():
                     script = Script(
                         name=script_data['name'],
                         urls=script_data.get('urls', ''),
+                        ports=script_data.get('ports', ''),
                         description=script_data.get('description', ''),
                         position=max_position + 1 + imported_count,
                         
@@ -385,6 +397,12 @@ def import_scripts():
             flash(f'导入失败: {str(e)}', 'error')
     
     return render_template('import.html', form=form)
+
+@app.route('/check_ports/<int:id>', methods=['GET'])
+def check_script_ports(id):
+    script = Script.query.get_or_404(id)
+    port_status = check_ports_status(script)
+    return jsonify(port_status)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=4446, debug=True) 

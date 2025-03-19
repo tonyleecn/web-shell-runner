@@ -111,4 +111,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // 端口状态刷新
+    function refreshPortStatus() {
+        const portBadges = document.querySelectorAll('.port-badge');
+        
+        portBadges.forEach(badge => {
+            const scriptId = badge.getAttribute('data-script-id');
+            
+            fetch(`/check_ports/${scriptId}`)
+                .then(response => response.json())
+                .then(data => {
+                    const port = badge.getAttribute('data-port');
+                    const statusSpan = badge.querySelector('.port-status');
+                    
+                    if (data[port]) {
+                        badge.classList.remove('bg-danger');
+                        badge.classList.add('bg-success');
+                        statusSpan.textContent = '开放';
+                    } else {
+                        badge.classList.remove('bg-success');
+                        badge.classList.add('bg-danger');
+                        statusSpan.textContent = '关闭';
+                    }
+                })
+                .catch(error => {
+                    console.error('检查端口状态出错:', error);
+                });
+        });
+    }
+    
+    // 每30秒刷新一次端口状态
+    if (document.querySelectorAll('.port-badge').length > 0) {
+        setInterval(refreshPortStatus, 30000);
+    }
 }); 

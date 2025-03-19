@@ -28,12 +28,30 @@
                     </div>
                     <div class="card-body d-flex flex-column">
                         {% if script.urls %}
-                            <div class="url-container mb-auto">
+                            <div class="url-container mb-2">
                                 {% for url in script.urls.splitlines() %}
                                     {% if url.strip() %}
                                         <a href="{{ url.strip() }}" class="btn btn-sm btn-outline-info mb-1 text-truncate url-link" target="_blank" title="{{ url.strip() }}">
                                             <i class="bi bi-link-45deg"></i> {{ url.strip() }}
                                         </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if script.ports %}
+                            <div class="port-container mb-2">
+                                {% for port in script.ports.splitlines() %}
+                                    {% if port.strip() %}
+                                        <span class="badge mb-1 port-badge {% if script.port_status.get(port.strip(), False) %}bg-success{% else %}bg-danger{% endif %}" 
+                                              data-port="{{ port.strip() }}" data-script-id="{{ script.id }}">
+                                            <i class="bi bi-hdd-network"></i> 端口 {{ port.strip() }}: 
+                                            {% if script.port_status.get(port.strip(), False) %}
+                                                <span class="port-status">开放</span>
+                                            {% else %}
+                                                <span class="port-status">关闭</span>
+                                            {% endif %}
+                                        </span>
                                     {% endif %}
                                 {% endfor %}
                             </div>

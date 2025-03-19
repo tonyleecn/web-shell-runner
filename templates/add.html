@@ -35,6 +35,19 @@
             </div>
             
             <div class="mb-3">
+                {{ form.ports.label(class="form-label") }}
+                {{ form.ports(class="form-control", rows=3) }}
+                {% if form.ports.errors %}
+                    <div class="text-danger">
+                        {% for error in form.ports.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text">请输入服务监听的端口号，每行一个</div>
+            </div>
+            
+            <div class="mb-3">
                 {{ form.description.label(class="form-label") }}
                 {{ form.description(class="form-control", rows=3) }}
                 {% if form.description.errors %}

@@ -51,14 +51,14 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    align-items: flex-start;
 }
 
 .url-link {
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-bottom: 5px;
+    margin-right: 0.5em;
     text-align: left;
 }
 
@@ -73,4 +73,17 @@ body {
 .card-body {
     flex: 1 1 auto;
     min-height: 100px;
+}
+
+.port-badge {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    margin-right: 0.5em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
 } 

@@ -10,6 +10,9 @@ class Script(db.Model):
     description = db.Column(db.Text, nullable=True)
     position = db.Column(db.Integer, default=0)
     
+    # 添加端口字段
+    ports = db.Column(db.Text, nullable=True)  # 存储多个端口，每行一个
+    
     # 四种操作的脚本路径
     start_script = db.Column(db.String(255), nullable=True)
     stop_script = db.Column(db.String(255), nullable=True)
