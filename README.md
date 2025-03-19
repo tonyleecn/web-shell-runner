@@ -31,22 +31,32 @@
 
 ### 安装过程
 
-1. 克隆仓库
-bash
-git https://github.com/tonyleecn/web-shell-runner.git
-cd web-shell-runner
+1. **克隆仓库**
+   ```bash
+   git clone https://github.com/tonyleecn/web-shell-runner.git
+   cd web-shell-runner
+   ```
 
-2. 安装依赖
-python3 -m venv venv
-source venv/bin/activate
-bash
-pip install -r requirements.txt
+2. **安装依赖**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
 
-3. 运行项目
-bash
-python app.py
+3. **运行项目**
+   ```bash
+   python app.py
+   ```
 
-4. 访问项目
-bash
-http://localhost:4446
+4. **访问项目**
+   ```
+   http://localhost:4446
+   ```
+
+## 注意事项
+
+- 本项目仅用于测试和学习目的
+- 不建议在生产环境中使用
+- 确保脚本执行权限设置正确
 
