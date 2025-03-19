@@ -19,10 +19,10 @@
 ## 截图展示
 
 ### 主界面
-![主界面](demo-page/main-interface.png)
+![主界面](demo-page/首页.png)
 
 ### 脚本执行
-![脚本执行](demo-page/script-execution.png)
+![脚本执行](demo-page/添加服务.png)
 
 ## 安装步骤
 
