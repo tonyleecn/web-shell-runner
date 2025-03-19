@@ -1,0 +1,76 @@
+body {
+    background-color: #f8f9fa;
+    padding-bottom: 2rem;
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 1.5rem;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+.btn-group {
+    white-space: nowrap;
+}
+
+/* 拖拽相关样式 */
+.script-item {
+    cursor: move;
+}
+
+.script-item.sortable-ghost {
+    background-color: #f0f8ff;
+    opacity: 0.5;
+}
+
+.handle {
+    cursor: grab;
+    color: #6c757d;
+}
+
+.handle:hover {
+    color: #343a40;
+}
+
+/* 最大化显示 */
+.container {
+    max-width: 100%;
+    padding: 0 30px;
+}
+
+.table-responsive {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+/* URL链接样式 */
+.url-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.url-link {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* 描述容器样式 */
+.description-container {
+    border-top: 1px solid rgba(0,0,0,.125);
+    padding-top: 8px;
+    margin-top: auto;
+}
+
+/* 确保卡片主体可以伸展 */
+.card-body {
+    flex: 1 1 auto;
+    min-height: 100px;
+} 

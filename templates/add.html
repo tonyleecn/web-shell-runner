@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">添加服务</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+                {{ form.name.label(class="form-label") }}
+                {{ form.name(class="form-control") }}
+                {% if form.name.errors %}
+                    <div class="text-danger">
+                        {% for error in form.name.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                {{ form.urls.label(class="form-label") }}
+                {{ form.urls(class="form-control", rows=3) }}
+                {% if form.urls.errors %}
+                    <div class="text-danger">
+                        {% for error in form.urls.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text">请输入应用的访问URL，每行一个</div>
+            </div>
+            
+            <div class="mb-3">
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-control", rows=3) }}
+                {% if form.description.errors %}
+                    <div class="text-danger">
+                        {% for error in form.description.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <h5 class="mt-4 mb-3">操作脚本设置</h5>
+            
+            <div class="accordion mb-4" id="scriptAccordion">
+                <!-- 启动脚本设置 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingStart">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStart">
+                            启动脚本设置
+                        </button>
+                    </h2>
+                    <div id="collapseStart" class="accordion-collapse collapse" data-bs-parent="#scriptAccordion">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                {{ form.start_script.label(class="form-label") }}
+                                {{ form.start_script(class="form-control") }}
+                                {% if form.start_script.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.start_script.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">启动服务的脚本路径</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.start_user_param.label(class="form-label") }}
+                                        {{ form.start_user_param(class="form-control") }}
+                                        <div class="form-text">启动脚本的用户参数</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.start_action_param.label(class="form-label") }}
+                                        {{ form.start_action_param(class="form-control") }}
+                                        <div class="form-text">启动脚本的操作参数</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 停止脚本设置 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingStop">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStop">
+                            停止脚本设置
+                        </button>
+                    </h2>
+                    <div id="collapseStop" class="accordion-collapse collapse" data-bs-parent="#scriptAccordion">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                {{ form.stop_script.label(class="form-label") }}
+                                {{ form.stop_script(class="form-control") }}
+                                {% if form.stop_script.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.stop_script.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">停止服务的脚本路径</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.stop_user_param.label(class="form-label") }}
+                                        {{ form.stop_user_param(class="form-control") }}
+                                        <div class="form-text">停止脚本的用户参数</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.stop_action_param.label(class="form-label") }}
+                                        {{ form.stop_action_param(class="form-control") }}
+                                        <div class="form-text">停止脚本的操作参数</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 重启脚本设置 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingRestart">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRestart">
+                            重启脚本设置
+                        </button>
+                    </h2>
+                    <div id="collapseRestart" class="accordion-collapse collapse" data-bs-parent="#scriptAccordion">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                {{ form.restart_script.label(class="form-label") }}
+                                {{ form.restart_script(class="form-control") }}
+                                {% if form.restart_script.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.restart_script.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">重启服务的脚本路径</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.restart_user_param.label(class="form-label") }}
+                                        {{ form.restart_user_param(class="form-control") }}
+                                        <div class="form-text">重启脚本的用户参数</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.restart_action_param.label(class="form-label") }}
+                                        {{ form.restart_action_param(class="form-control") }}
+                                        <div class="form-text">重启脚本的操作参数</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 发布脚本设置 -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingDeploy">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeploy">
+                            发布脚本设置
+                        </button>
+                    </h2>
+                    <div id="collapseDeploy" class="accordion-collapse collapse" data-bs-parent="#scriptAccordion">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                {{ form.deploy_script.label(class="form-label") }}
+                                {{ form.deploy_script(class="form-control") }}
+                                {% if form.deploy_script.errors %}
+                                    <div class="text-danger">
+                                        {% for error in form.deploy_script.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="form-text">发布服务的脚本路径</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.deploy_user_param.label(class="form-label") }}
+                                        {{ form.deploy_user_param(class="form-control") }}
+                                        <div class="form-text">发布脚本的用户参数</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ form.deploy_action_param.label(class="form-label") }}
+                                        {{ form.deploy_action_param(class="form-control") }}
+                                        <div class="form-text">发布脚本的操作参数</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">返回</a>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

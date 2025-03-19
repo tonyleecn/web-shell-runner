@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>服务管理</h3>
+    <a href="{{ url_for('add_script') }}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> 添加服务
+    </a>
+</div>
+
+{% if scripts %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4" id="scriptList">
+        {% for script in scripts %}
+            <div class="col script-item" data-id="{{ script.id }}">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ script.name }}</h5>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-gear"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="{{ url_for('edit_script', id=script.id) }}">编辑</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger delete-script" href="#" data-id="{{ script.id }}">删除</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        {% if script.urls %}
+                            <div class="url-container mb-auto">
+                                {% for url in script.urls.splitlines() %}
+                                    {% if url.strip() %}
+                                        <a href="{{ url.strip() }}" class="btn btn-sm btn-outline-info mb-1 text-truncate url-link" target="_blank" title="{{ url.strip() }}">
+                                            <i class="bi bi-link-45deg"></i> {{ url.strip() }}
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if script.description %}
+                            <div class="mt-2 description-container">
+                                <p class="card-text small text-muted mb-0">{{ script.description }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between">
+                            <div class="handle"><i class="bi bi-grip-vertical"></i></div>
+                            <div class="btn-group">
+                                {% if script.deploy_script %}
+                                <button class="btn btn-sm btn-outline-primary run-script" data-id="{{ script.id }}" data-operation="deploy" title="发布">
+                                    <i class="bi bi-cloud-upload"></i>
+                                </button>
+                                {% endif %}
+                                
+                                {% if script.start_script %}
+                                <button class="btn btn-sm btn-outline-success run-script" data-id="{{ script.id }}" data-operation="start" title="启动">
+                                    <i class="bi bi-play-fill"></i>
+                                </button>
+                                {% endif %}
+                                
+                                {% if script.stop_script %}
+                                <button class="btn btn-sm btn-outline-danger run-script" data-id="{{ script.id }}" data-operation="stop" title="停止">
+                                    <i class="bi bi-stop-fill"></i>
+                                </button>
+                                {% endif %}
+                                
+                                {% if script.restart_script %}
+                                <button class="btn btn-sm btn-outline-warning run-script" data-id="{{ script.id }}" data-operation="restart" title="重启">
+                                    <i class="bi bi-arrow-repeat"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        暂无服务，请点击"添加服务"按钮添加。
+    </div>
+{% endif %}
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">确认删除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>确定要删除这个服务吗？此操作不可撤销。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <form id="deleteForm" method="POST">
+                    <button type="submit" class="btn btn-danger">删除</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 运行脚本模态框 -->
+<div class="modal fade" id="runModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">运行脚本</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="runStatus" class="alert alert-info d-none"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" id="runButton">运行</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

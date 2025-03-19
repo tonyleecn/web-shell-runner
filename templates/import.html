@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">导入脚本</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <div class="mb-3">
+                {{ form.file.label(class="form-label") }}
+                {{ form.file(class="form-control") }}
+                {% if form.file.errors %}
+                    <div class="text-danger">
+                        {% for error in form.file.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text">请选择之前导出的JSON文件</div>
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">返回</a>
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 
