@@ -40,7 +40,7 @@ env/
 # 本地配置文件
 .env
 .flaskenv
-config.py
+#config.py
 
 # IDE 相关
 .idea/
