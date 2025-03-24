@@ -447,60 +447,34 @@ def check_script_ports(id):
 @app.route('/script_output/<int:pid>', methods=['GET'])
 def script_output(pid):
     try:
-        # 将 pid 转换为整数
-        pid = int(pid)
+        # 检查进程是否存在
+        os.kill(pid, 0)
+        return jsonify({'running': True})
+    except OSError:
+        return jsonify({'running': False})
 
-        output_lines = ScriptRunner.get_output(pid)
-        print(f"获取到 {len(output_lines)} 行输出，PID: {pid}")
 
-        # 格式化输出
-        formatted_output = []
-        for line_type, line in output_lines:
-            try:
-                # 确保 line 是字符串
-                if not isinstance(line, str) and not isinstance(line, int):
-                    line = str(line)
+@app.route('/script_content', methods=['POST'])
+def script_content():
+    """获取脚本文件内容"""
+    try:
+        script_path = request.json.get('path')
 
-                print(f"输出类型: {line_type}, 内容: {str(line)[:30]}...")
+        # 安全检查：确保路径是一个文件而不是目录
+        if not script_path or not os.path.isfile(script_path):
+            return jsonify({'status': 'error', 'message': f'无效的脚本路径: {script_path}'}), 400
 
-                if line_type == 'stdout':
-                    formatted_output.append(
-                        {'type': 'stdout', 'content': line})
-                elif line_type == 'stderr':
-                    formatted_output.append(
-                        {'type': 'stderr', 'content': line})
-                elif line_type == 'exit':
-                    formatted_output.append(
-                        {'type': 'exit', 'code': int(line)})
-                    # 清理队列
-                    ScriptRunner.cleanup_queue(pid)
-                    print(f"进程 {pid} 已退出，清理队列")
-            except Exception as e:
-                print(f"处理输出行时出错: {str(e)}")
-                continue
-
-        # 检查进程是否仍在运行
-        try:
-            os.kill(pid, 0)
-            is_running = True
-        except OSError:
-            is_running = False
-            # 如果进程已结束但没有退出码，添加一个
-            if not any(line[0] == 'exit' for line in output_lines) and not any(item.get('type') == 'exit' for item in formatted_output):
-                formatted_output.append({'type': 'exit', 'code': 0})
-                print(f"进程 {pid} 已结束但没有退出码，添加默认退出码")
-                # 清理队列
-                ScriptRunner.cleanup_queue(pid)
+        # 读取文件内容
+        with open(script_path, 'r', encoding='utf-8') as f:
+            content = f.read()
 
         return jsonify({
-            'output': formatted_output,
-            'running': is_running
+            'status': 'success',
+            'content': content,
+            'path': script_path
         })
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        print(f"获取脚本输出出错: {str(e)}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'status': 'error', 'message': f'读取脚本内容出错: {str(e)}'}), 500
 
 
 if __name__ == '__main__':

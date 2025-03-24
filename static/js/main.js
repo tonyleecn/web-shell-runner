@@ -305,4 +305,65 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.querySelectorAll('.port-badge').length > 0) {
         setInterval(refreshPortStatus, 3000);
     }
+    
+    // 查看脚本内容
+    const viewScriptButtons = document.querySelectorAll('.view-script');
+    const viewScriptModal = new bootstrap.Modal(document.getElementById('viewScriptModal'));
+    const scriptContent = document.getElementById('scriptContent');
+    const scriptPath = document.getElementById('scriptPath');
+    const copyScriptBtn = document.getElementById('copyScriptBtn');
+    
+    viewScriptButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const scriptId = this.getAttribute('data-id');
+            const scriptType = this.getAttribute('data-type');
+            const path = this.getAttribute('data-path');
+            
+            // 清空内容
+            scriptContent.textContent = '加载中...';
+            scriptPath.textContent = path;
+            
+            // 获取脚本内容
+            fetch('/script_content', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ path: path })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    scriptContent.textContent = data.content;
+                    scriptPath.textContent = data.path;
+                } else {
+                    scriptContent.textContent = `获取脚本内容失败: ${data.message}`;
+                }
+            })
+            .catch(error => {
+                console.error('获取脚本内容出错:', error);
+                scriptContent.textContent = `获取脚本内容出错: ${error.message}`;
+            });
+            
+            viewScriptModal.show();
+        });
+    });
+    
+    // 复制脚本内容
+    copyScriptBtn.addEventListener('click', function() {
+        const content = scriptContent.textContent;
+        navigator.clipboard.writeText(content)
+            .then(() => {
+                // 显示复制成功提示
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="bi bi-check"></i> 已复制';
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 2000);
+            })
+            .catch(err => {
+                console.error('复制失败:', err);
+            });
+    });
 }); 
