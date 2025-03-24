@@ -352,18 +352,43 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 复制脚本内容
     copyScriptBtn.addEventListener('click', function() {
-        const content = scriptContent.textContent;
-        navigator.clipboard.writeText(content)
-            .then(() => {
-                // 显示复制成功提示
-                const originalText = this.innerHTML;
+        try {
+            // 获取脚本内容
+            const content = scriptContent.textContent;
+            
+            // 选择文本内容
+            const range = document.createRange();
+            range.selectNodeContents(scriptContent);
+            
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            // 尝试复制
+            const successful = document.execCommand('copy');
+            
+            // 清除选择
+            selection.removeAllRanges();
+            
+            // 显示复制结果
+            const originalText = this.innerHTML;
+            if (successful) {
                 this.innerHTML = '<i class="bi bi-check"></i> 已复制';
-                setTimeout(() => {
-                    this.innerHTML = originalText;
-                }, 2000);
-            })
-            .catch(err => {
-                console.error('复制失败:', err);
-            });
+            } else {
+                this.innerHTML = '<i class="bi bi-x"></i> 复制失败';
+            }
+            
+            setTimeout(() => {
+                this.innerHTML = originalText;
+            }, 2000);
+        } catch (err) {
+            console.error('复制失败:', err);
+            // 显示复制失败提示
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="bi bi-x"></i> 复制失败';
+            setTimeout(() => {
+                this.innerHTML = originalText;
+            }, 2000);
+        }
     });
 }); 
